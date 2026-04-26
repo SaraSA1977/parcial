@@ -1,0 +1,49 @@
+import os
+from flask import Flask
+from flask_cors import CORS
+from dotenv import load_dotenv
+from flask_jwt_extended import JWTManager
+
+
+# NUESTRAS RUTAS CRUD
+from routes.auth.auth_routes import auth_bp
+from routes.sensores.sensores_routes import sensores_bp
+
+from datetime import timedelta
+
+def run_app():
+    load_dotenv()
+    app = Flask(__name__)
+
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(
+    minutes=int(os.getenv("JWT_EXPIRES_MIN", 1))
+)
+
+    jwt = JWTManager(app)
+    # Configuración CORS
+    CORS(
+        app,
+        resources={r"/*": {"origins": "*"}},
+        supports_credentials=False,
+        expose_headers=["Authorization"],
+        allow_headers=["Content-Type", "Authorization"],
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+    )
+
+    ## registrar rutas CRUD de tus tablas
+    app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(sensores_bp, url_prefix="/sensores")
+
+
+    return app
+
+app = run_app()
+
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("HOST", "127.0.0.1"),
+        port=int(os.getenv("PORT", 5000)),
+        debug=True
+    )
