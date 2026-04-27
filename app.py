@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager
 # NUESTRAS RUTAS CRUD
 from routes.auth.auth_routes import auth_bp
 from routes.sensores.sensores_routes import sensores_bp
+from routes.users.users_routes import users_bp
 
 from datetime import timedelta
 
@@ -35,6 +36,7 @@ def run_app():
     ## registrar rutas CRUD de tus tablas
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(sensores_bp, url_prefix="/sensores")
+    app.register_blueprint(users_bp, url_prefix="/users")
 
 
     return app
