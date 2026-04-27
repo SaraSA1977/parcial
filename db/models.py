@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, Float, Boolean, String, DateTime
 from datetime import datetime
 from db.db import Base
+from sqlalchemy.sql import func
 
 
 class User(Base):
@@ -24,7 +25,7 @@ class Sensor(Base):
     led_rojo = Column(Boolean)
     led_blanco = Column(Boolean)
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
 
     # 🔥 IMPORTANTE
     def to_dict(self):

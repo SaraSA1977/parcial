@@ -1,6 +1,7 @@
 from db.db import SessionLocal
 from db.models import Sensor
 
+
 def save(data):
     db = SessionLocal()
 
@@ -25,7 +26,7 @@ def last():
     s = db.query(Sensor).order_by(Sensor.id.desc()).first()
     db.close()
 
-    return s.__dict__ if s else {}
+    return s.to_dict() if s else {}
 
 
 def historial():
@@ -33,7 +34,7 @@ def historial():
     data = db.query(Sensor).all()
     db.close()
 
-    return [d.__dict__ for d in data]
+    return [d.to_dict() for d in data]
 
 
 def stats():
@@ -45,5 +46,6 @@ def stats():
 
     return {
         "max": max(temps) if temps else 0,
-        "min": min(temps) if temps else 0
+        "min": min(temps) if temps else 0,
+        "avg": sum(temps) / len(temps) if temps else 0
     }

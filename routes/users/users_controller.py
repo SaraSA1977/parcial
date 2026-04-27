@@ -9,7 +9,7 @@ def login_user(data):
     if err:
         return unauthorized(message="Login Inválido", errors=err)
    
-    token = create_access_token(identity=str(user.id))
+    token = create_access_token(identity=str(user.id)) 
  
     return ok(
         data={
